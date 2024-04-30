@@ -18,7 +18,12 @@ FROM alpine
 RUN set -eux ; \
     apk update ; \
     apk upgrade ; \
-    apk add --no-cache ffmpeg
+    apk add --no-cache tar xz ; \
+    wget https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-arm64-static.tar.xz ; \
+    tar xvf ffmpeg-git-arm64-static.tar.xz ; \
+    FFMPEG_DIR=$(ls | grep "ffmpeg-git-[0-9]*-arm64-static") ; \
+    mv ${FFMPEG_DIR}/ffmpeg /usr/bin/ffmpeg ; \
+    rm -rf ${FFMPEG_DIR} ffmpeg-git-arm64-static.tar.xz;
 
 # copy the built executable from the last stage to alpine image
 # so we can try it with ffmpeg
